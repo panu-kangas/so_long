@@ -6,10 +6,10 @@ void	check_path_collectible(t_game *game)
 	int	y;
 
 	y = 0;
-	while (y < game->map_line_count)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < game->map_line_len)
+		while (x < game->map_width)
 		{
 			if (game->map[y][x].type == 'C')
 			{
@@ -18,12 +18,12 @@ void	check_path_collectible(t_game *game)
 			}
 			x++;
 		}
-		if (x != game->map_line_len)
+		if (x != game->map_width)
 			break ;
 		y++;
 	}
-	if (y != game->map_line_count)
-		write_error(game, NULL, "Invalid map; Collectible(s) unreachable");
+	if (y != game->map_height)
+		error_exit(game, NULL, "Invalid map; Collectible(s) unreachable");
 }
 
 void	check_path_exit(t_game *game)
@@ -32,30 +32,30 @@ void	check_path_exit(t_game *game)
 	int	y;
 
 	y = 0;
-	while (y < game->map_line_count)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < game->map_line_len)
+		while (x < game->map_width)
 		{
 			if (game->map[y][x].type == 'E')
 				break ;
 			x++;
 		}
-		if (x != game->map_line_len)
+		if (x != game->map_width)
 			break ;
 		y++;
 	}
 	if (game->map[y][x].flood_fill == 0)
-		write_error(game, NULL, "Invalid map; Player can't reach Exit");
+		error_exit(game, NULL, "Invalid map; Player can't reach Exit");
 }
 
 void	make_fill(t_game *game, int x, int y)
 {
-	int line_count;
-	int line_len;
+	int	line_count;
+	int	line_len;
 
-	line_count = game->map_line_count;
-	line_len = game->map_line_len;
+	line_count = game->map_height;
+	line_len = game->map_width;
 	if (y > 0 && game->map[y - 1][x].flood_fill == 0)
 	{
 		game->map[y - 1][x].flood_fill = 1;
@@ -84,10 +84,10 @@ void	init_fill(t_game *game)
 	int	y;
 
 	y = 0;
-	while (y < game->map_line_count)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < game->map_line_len)
+		while (x < game->map_width)
 		{
 			if (game->map[y][x].type == '1')
 				game->map[y][x].flood_fill = -1;
@@ -106,22 +106,20 @@ void	flood_fill(t_game *game)
 
 	init_fill(game);
 	y = 0;
-	while (y < game->map_line_count)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < game->map_line_len)
+		while (x < game->map_width)
 		{
 			if (game->map[y][x].type == 'P')
 				break ;
 			x++;
 		}
-		if (x != game->map_line_len)
+		if (x != game->map_width)
 			break ;
 		y++;
 	}
 	make_fill(game, x, y);
 	check_path_exit(game);
 	check_path_collectible(game);
-
-	
 }

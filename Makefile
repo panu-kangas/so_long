@@ -6,8 +6,8 @@ LIBFT	= ./lib/libft
 HEADERS	= -I $(LIBMLX)/include -I $(LIBFT)
 LIBS	= $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a -ldl -lglfw -pthread -lm
 
-SRCS	= main.c draw_images.c error_handling.c parse_map.c utils.c validate_map.c flood_fill.c \
-			get_distance.c text_hook.c
+SRCS	= main.c draw_map.c draw_utils.c error_handling.c parse_map.c utils.c validate_map.c flood_fill.c \
+			get_distance.c text_hook.c game_keyhook.c draw_images.c
 OBJS	= ${SRCS:.c=.o}
 
 all: libmlx libft $(NAME)

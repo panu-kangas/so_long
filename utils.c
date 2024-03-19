@@ -1,28 +1,5 @@
 #include "so_long.h"
 
-void	find_char_in_map(t_game *game, char c, int *coordinates) // MIGHT BE USELESS!!
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < game->map_line_count)
-	{
-		x = 0;
-		while (x < game->map_line_len)
-		{
-			if (game->map[y][x].type == c)
-				break ;
-			x++;
-		}
-		if (x != game->map_line_len)
-			break ;
-		y++;
-	}
-	coordinates[0] = x;
-	coordinates[1] = y;
-}
-
 char	*get_str(char *map_str, char *buf, int bytes)
 {
 	int		i;
@@ -63,9 +40,9 @@ char	*get_map_str(t_game *game)
 			break;
 		map_str = get_str(map_str, buf, bytes);
 		if (map_str == NULL)
-			write_sys_error(game, NULL, "Malloc failed");
+			sys_error_exit(game, NULL, "Malloc failed");
 	}
 	if (bytes == -1)
-		write_sys_error(game, NULL, "Read failed");
+		sys_error_exit(game, NULL, "Read failed");
 	return (map_str);
 }

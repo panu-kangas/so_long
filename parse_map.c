@@ -28,13 +28,13 @@ void	allocate_map(t_game *game, int line_count, int line_len)
 
 	game->map = malloc(line_count * sizeof(t_map *));
 	if (game->map == NULL)
-		write_sys_error(game, NULL, "Malloc failed");
+		sys_error_exit(game, NULL, "Malloc failed");
 	i = 0;
 	while (i < line_count)
 	{
 		game->map[i] = malloc(line_len * sizeof(t_map));
 		if (game->map[i] == NULL)
-			write_sys_error(game, NULL, "Malloc failed");
+			sys_error_exit(game, NULL, "Malloc failed");
 		i++;
 	}
 }
@@ -67,30 +67,22 @@ void	parse_map(t_game *game)
 	int		line_count;
 	int		line_len;
 	int		i;
-	char	*map_file_str;
 
+	game->map_file_str = get_map_str(game);
+	if (game->map_file_str == NULL)
+		error_exit(game, NULL, "Map-file is empty"); 
 
-	map_file_str = get_map_str(game);
-	if (map_file_str == NULL)
-		write_error(game, NULL, "Map-file is empty"); 
-	game->map_file_str = map_file_str;
-
-	line_count = validate_map(game, map_file_str); // IN PROCESS
+	line_count = validate_map(game, game->map_file_str);
 
 	
 	i = 0;
-	while (map_file_str[i] != '\n')
+	while (game->map_file_str[i] != '\n')
 		i++;
 	line_len = i;
 
-	game->map_line_count = line_count;
-	game->map_line_len = line_len;
+	game->map_height = line_count;
+	game->map_width = line_len;
 	
-	set_map(game, map_file_str, line_count, line_len);
-
-	free(map_file_str);
-	map_file_str = NULL;
-	game->map_file_str = NULL;
-
+	set_map(game, game->map_file_str, line_count, line_len);
 	flood_fill(game);
 }

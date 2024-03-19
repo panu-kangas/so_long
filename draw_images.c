@@ -1,204 +1,83 @@
 #include "so_long.h"
 
-void	set_instances(t_game *game)
+void	check_map_type(t_game *game, int x, int y)
 {
-	int	i;
+	if (x == game->player_coord[0] && y == game->player_coord[1])
+	{
+		if (x == game->exit_coord[0] && y == game->exit_coord[1])
+			draw_exit(game, game->draw_coord);
+		else
+			draw_floor(game, game->draw_coord);
+		draw_player(game, game->draw_coord);
+	}
+	else if (game->map[y][x].type == '0' || game->map[y][x].type == 'P')
+		draw_floor(game, game->draw_coord);
+	else if (game->map[y][x].type == '1')
+		draw_wall(game, game->draw_coord);
+	else if (game->map[y][x].type == 'C')
+		draw_collectible(game, x, y, game->draw_coord);
+	else if (game->map[y][x].type == 'E')
+		draw_exit(game, game->draw_coord);
+}
+
+int	get_y_start(t_game *game)
+{
+	int	height;
+	int	dist_to_walls;
+
+	if (game->map_is_big == 0)
+		return (0);
+	if (game->player_coord[1] <= 3)
+		return (0);
+	height = game->window_height / 70;
+	dist_to_walls = game->map_height - game->player_coord[1] - 1;
+	if (dist_to_walls <= 4)
+		return (game->player_coord[1] - (height / 2) - (4 - dist_to_walls));
+	else
+		return (game->player_coord[1] - (height / 2) + 1);
+}
+
+int	get_x_start(t_game *game)
+{
+	int	width;
+	int	dist_to_walls;
+
+	if (game->map_is_big == 0)
+		return (0);
+	if (game->player_coord[0] <= 6)
+		return (0);
+	width = game->window_width / 70;
+	dist_to_walls = game->map_width - game->player_coord[0] - 1;
+	if (dist_to_walls <= 7)
+		return (game->player_coord[0] - (width / 2) - (7 - dist_to_walls));
+	else
+		return (game->player_coord[0] - (width / 2));
+}
+
+void	draw_images(t_game *game)
+{
 	int	x;
 	int	y;
+	int	width;
+	int	height;
 
-	i = 0;
-	y = 0;
-	while (y < game->map_line_count)
+	game->f_count = 0;
+	game->w_count = 0;
+	game->c_count = 0;
+	width = game->window_width / 70;
+	height = game->window_height / 70;
+	y = get_y_start(game);
+	while (game->draw_coord[1] < height * 70)
 	{
-		x = 0;
-		while (x < game->map_line_len)
+		x = get_x_start(game);
+		game->draw_coord[0] = 0;
+		while (game->draw_coord[0] < width * 70)
 		{
-			if (game->map[y][x].type == 'C')
-				game->map[y][x].instance = &game->collectible_img->instances[i++];
+			check_map_type(game, x, y);
+			game->draw_coord[0] += 70;
 			x++;
 		}
+		game->draw_coord[1] += 70;
 		y++;
 	}
-}
-
-void	set_img_depth(t_game *game, mlx_image_t *img, int count, int num)
-{
-	int	i;
-
-	i = -1;
-	if (num == 1)
-	{
-		while (++i < count)
-			mlx_set_instance_depth(&img->instances[i], 0); // does this need error check ?
-	}
-	else if (num == 2)
-	{
-		while (++i < count)
-			mlx_set_instance_depth(&img->instances[i], 0); // does this need error check ?
-	}
-	else if (num == 3)
-	{
-		game->collectible_count = count;
-		while (++i < count)
-			mlx_set_instance_depth(&img->instances[i], 1); // does this need error check ?
-	}
-	else if (num == 4)
-	{
-		while (++i < count)
-			mlx_set_instance_depth(&img->instances[i], 2); // does this need error check ?
-	}
-}
-
-void	draw_exit(t_game *game, int x, int y)
-{
-	mlx_texture_t	*exit_text;
-	mlx_image_t		*exit_img;
-
-	exit_text = mlx_load_png("./tiles/exit.png");
-	if (!exit_text)
-        return ; // error_exit_MLX
-	exit_img = mlx_texture_to_image(game->mlx, exit_text);
-	if (!exit_img)
-        return ; // error_exit_MLX
-	while (y < game->map_line_count)
-	{
-		x = 0;
-		while (x < game->map_line_len)
-		{
-			if (game->map[y][x].type == 'E')
-			{
-				if (mlx_image_to_window(game->mlx, exit_img, x * 70, y * 70) < 0)
-        			return ; // error_exit_MLX
-			}
-			x++;
-		}
-		y++;
-	}
-	set_img_depth(game, exit_img, 1, 1);
-	game->exit_img = exit_img;
-}
-
-void	draw_player(t_game *game, int x, int y)
-{
-	mlx_texture_t	*player_text;
-	mlx_image_t		*player_img;
-
-	player_text = mlx_load_png("./sprites/player.png");
-	if (!player_text)
-        return ; // error_exit_MLX
-	player_img = mlx_texture_to_image(game->mlx, player_text);
-	if (!player_img)
-        return ; // error_exit_MLX
-	while (y < game->map_line_count)
-	{
-		x = 0;
-		while (x < game->map_line_len)
-		{
-			if (game->map[y][x].type == 'P')
-			{
-				if (mlx_image_to_window(game->mlx, player_img, x * 70, y * 70) < 0)
-        			return ; // error_exit_MLX
-			}
-			x++;
-		}
-		y++;
-	}
-	set_img_depth(game, player_img, 1, 4);
-	game->player_img = player_img;
-}
-
-void	draw_collectible(t_game *game, int collectible_count, int x, int y)
-{
-	mlx_texture_t	*collectible_text;
-	mlx_image_t		*collectible_img;
-
-	collectible_text = mlx_load_png("./sprites/collectible.png");
-	if (!collectible_text)
-        return ; // error_exit_MLX
-	collectible_img = mlx_texture_to_image(game->mlx, collectible_text);
-	if (!collectible_img)
-        return ; // error_exit_MLX
-	y = -1;
-	while (++y < game->map_line_count)
-	{
-		x = -1;
-		while (++x < game->map_line_len)
-		{
-			if (game->map[y][x].type == 'C')
-			{
-				if (mlx_image_to_window(game->mlx, collectible_img, (x * 70) + 17, (y * 70) + 22) < 0) // should I count exact centre?
-        			return ; // error_exit_MLX
-				collectible_count++;
-			}
-		}
-	}
-	game->collectible_img = collectible_img; 
-	set_img_depth(game, collectible_img, collectible_count, 3);
-}
-
-void	draw_wall(t_game *game, int wall_count, int x, int y)
-{
-	mlx_texture_t	*wall_text;
-	mlx_image_t		*wall_img;
-
-	wall_text = mlx_load_png("./tiles/wall.png");
-	if (!wall_text)
-        return ; // error_exit_MLX
-	wall_img = mlx_texture_to_image(game->mlx, wall_text);
-	if (!wall_img)
-        return ; // error_exit_MLX
-	y = -1;
-	while (++y < game->map_line_count)
-	{
-		x = -1;
-		while (++x < game->map_line_len)
-		{
-			if (game->map[y][x].type == '1')
-			{
-				if (mlx_image_to_window(game->mlx, wall_img, x * 70, y * 70) < 0)
-        			return ; // error_exit_MLX
-				wall_count++;
-			}
-		}
-	}
-	set_img_depth(game, wall_img, wall_count, 2);
-}
-
-void	draw_floor(t_game *game, int floor_count, int x, int y)
-{
-	mlx_texture_t	*floor_text;
-	mlx_image_t		*floor_img;
-
-	floor_text = mlx_load_png("./tiles/floor.png");
-	if (!floor_text)
-        return ; // error_exit_MLX
-	floor_img = mlx_texture_to_image(game->mlx, floor_text);
-	if (!floor_img)
-        return ; // error_exit_MLX
-	y = -1;
-	while (++y < game->map_line_count)
-	{
-		x = -1;
-		while (++x < game->map_line_len)
-		{
-			if (game->map[y][x].type == '0' || game->map[y][x].type == 'P' || \
-			game->map[y][x].type == 'C')
-			{
-				if (mlx_image_to_window(game->mlx, floor_img, x * 70, y * 70) < 0)
-        			return ; // error_exit_MLX
-				floor_count++;
-			}
-		}
-	}
-	set_img_depth(game, floor_img, floor_count, 1);
-}
-
-void	draw_all(t_game *game)
-{
-	draw_floor(game, 0, 0, 0);
-	draw_wall(game, 0, 0, 0);
-	draw_collectible(game, 0, 0, 0);
-	draw_player(game, 0, 0);
-	draw_exit(game, 0, 0);
-	set_instances(game);
 }

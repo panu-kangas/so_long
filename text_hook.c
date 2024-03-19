@@ -8,11 +8,11 @@ void	write_ending(t_game *game, char *str)
 	mlx_delete_image(game->mlx, game->c_text);
 	mlx_delete_image(game->mlx, game->c_text2);
 	mlx_delete_image(game->mlx, game->c_num);
-	end_txt = mlx_put_string(game->mlx, str, 0, game->mlx->height - 50);
+	end_txt = mlx_put_string(game->mlx, str, 10, game->mlx->height - 50);
 	if (end_txt == NULL)
 		return ; // MLX_error_exit
 	end_txt2 = mlx_put_string(game->mlx, "Press ESC to exit game", \
-	0, game->mlx->height - 30);
+	10, game->mlx->height - 30);
 	if (end_txt2 == NULL)
 		return ; // MLX_error_exit
 }
@@ -45,8 +45,10 @@ void	change_move_count_text(t_game *game, int c_count)
 	int 		coord[2];
 	int			move_count;
 	static int	move_count_prev;
+	char		*num;
 
-	find_char_in_map(game, 'E', coord); // I should fix this probably, so that I use the struct info
+	coord[0] = game->exit_coord[0];
+	coord[1] = game->exit_coord[1];
 	move_count = game->map[coord[1]][coord[0]].dist_to_player;
 	if (c_count == -1)
 	{
@@ -57,8 +59,12 @@ void	change_move_count_text(t_game *game, int c_count)
 	{
 		mlx_delete_image(game->mlx, game->c_num);
 		game->c_num = NULL;
-		game->c_num = mlx_put_string(game->mlx, ft_itoa(move_count), \
-		460, game->mlx->height - 30);
+		num = ft_itoa(move_count);
+		if (num == NULL)
+			sys_error_exit(game, game->mlx, "Malloc failed");
+		game->c_num = mlx_put_string(game->mlx, num, \
+		520, game->mlx->height - 30);
+		free(num);
 		if (game->c_num == NULL)
 			return ; // MLX_error_exit
 		move_count_prev = move_count;
@@ -67,49 +73,96 @@ void	change_move_count_text(t_game *game, int c_count)
 
 void	change_c_count_text(t_game *game, int c_count_prev, int c_count)
 {
+	char	*num;
+
 	if (c_count_prev > c_count && c_count > 0)
 	{
 		mlx_delete_image(game->mlx, game->c_num);
 		game->c_num = NULL;
-		game->c_num = mlx_put_string(game->mlx, ft_itoa(c_count), \
-		150, game->mlx->height - 30);
+		num = ft_itoa(c_count);
+		if (num == NULL)
+			sys_error_exit(game, game->mlx, "Malloc failed");
+		game->c_num = mlx_put_string(game->mlx, num, \
+		160, game->mlx->height - 30);
+		free(num);
 		if (game->c_num == NULL)
 			return ; // MLX_error_exit
 		c_count_prev = c_count;
 	}
 }
 
+void	find_exit_in_window(t_game *game)
+{
+	int x;
+	int	y;
+	int	i;
+	int	j;
+
+	y = get_y_start(game);
+	i = -1;
+	while (++i < (game->window_height / 70))
+	{
+		x = get_x_start(game);
+		j = -1;
+		while (++j < (game->window_width / 70))
+		{
+			if (game->map[y][x].type == 'E')
+			{
+				mlx_delete_image(game->mlx, game->exit_img[0]);
+				if (mlx_image_to_window(game->mlx, game->exit_img[1], j * 70, i * 70) < 0)
+					return ; // MLX_error_exit
+				mlx_set_instance_depth(&game->exit_img[1]->instances[0], 2);
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void	delete_text_images(t_game *game)
+{
+	mlx_delete_image(game->mlx, game->c_text);
+	game->c_text = NULL;
+	mlx_delete_image(game->mlx, game->c_text2);
+	game->c_text2 = NULL;
+	mlx_delete_image(game->mlx, game->c_num);
+	game->c_num = NULL;
+	if (game->map_is_big == 0)
+		mlx_set_instance_depth(&game->exit_img[1]->instances[0], 2);
+	else 
+		find_exit_in_window(game);
+}
+
 void	is_all_collected(t_game *game, int c_count)
 {
-	int	move_count;
-	int	exit_x;
-	int	exit_y;
+	int		move_count;
+	int		exit_x;
+	int		exit_y;
+	char	*num;
 
 	if (c_count == 0)
 	{
-		mlx_delete_image(game->mlx, game->c_text);
-		game->c_text = NULL;
-		mlx_delete_image(game->mlx, game->c_text2);
-		game->c_text2 = NULL;
-		mlx_delete_image(game->mlx, game->c_num);
-		game->c_num = NULL;
+		delete_text_images(game);
 		get_dist_to_player(game);
 		exit_x = game->exit_coord[0];
 		exit_y = game->exit_coord[1];
 		move_count = game->map[exit_y][exit_x].dist_to_player;
 		game->c_text = mlx_put_string(game->mlx, "Yay, you got them! =)", \
-		0, game->mlx->height - 50);
+		10, game->mlx->height - 50);
 		if (game->c_text == NULL)
 			return ; // MLX_error_exit
 		game->c_text2 = mlx_put_string(game->mlx, \
-		"Move to exit as fast as you can.  Moves left: ", 0, game->mlx->height - 30);
+		"Now, move to exit as fast as you can.  Moves left: ", 10, game->mlx->height - 30);
 		if (game->c_text2 == NULL)
 			return ; // MLX_error_exit
-		game->c_num = mlx_put_string(game->mlx, ft_itoa(move_count), \
-		460, game->mlx->height - 30);
+		num = ft_itoa(move_count);
+		if (num == NULL)
+			sys_error_exit(game, game->mlx, "Malloc failed");
+		game->c_num = mlx_put_string(game->mlx, num, \
+		520, game->mlx->height - 30);
+		free(num);
 		if (game->c_num == NULL)
 			return ; // MLX_error_exit
-		// CHANGE EXIT IMAGE !
 		game->collectible_count = -1;
 	}
 }
@@ -120,6 +173,7 @@ void	text_hook(void *param)
 	static int	c_count_prev;
 	static int	text_flag;
 	int			c_count;
+	char		*num;
 
 	game = param;
 	c_count = game->collectible_count;
@@ -127,13 +181,17 @@ void	text_hook(void *param)
 	{
 		c_count_prev = c_count;
 		game->c_text = mlx_put_string(game->mlx, \
-		"Wow, nice, diamonds! Go catch them all!", 0, game->mlx->height - 50);
+		"Wow, diamonds! Go catch them all!", 10, game->mlx->height - 50);
 		game->c_text2 = mlx_put_string(game->mlx, "Diamond count: ", \
-		0, game->mlx->height - 30);
+		10, game->mlx->height - 30);
 		if (game->c_text2 == NULL)
 			return ; // MLX_error_exit
-		game->c_num = mlx_put_string(game->mlx, ft_itoa(c_count), \
-		150, game->mlx->height - 30);
+		num = ft_itoa(c_count);
+		if (num == NULL)
+			sys_error_exit(game, game->mlx, "Malloc failed");
+		game->c_num = mlx_put_string(game->mlx, num, \
+		160, game->mlx->height - 30);
+		free(num);
 		if (game->c_num == NULL)
 			return ; // MLX_error_exit
 		text_flag = 1;
