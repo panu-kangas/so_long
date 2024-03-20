@@ -7,17 +7,17 @@ void	get_sprite_images(t_game *game)
 
 	player_text = mlx_load_png("./sprites/player.png");
 	if (!player_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->player_img = mlx_texture_to_image(game->mlx, player_text);
 	if (!game->player_img)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(player_text);
 	collectible_text = mlx_load_png("./sprites/collectible.png");
 	if (!collectible_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->collectible_img = mlx_texture_to_image(game->mlx, collectible_text);
 	if (!game->collectible_img)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(collectible_text);
 }
 
@@ -28,17 +28,17 @@ void	get_exit_img(t_game *game)
 
 	exit1_text = mlx_load_png("./tiles/exit1.png");
 	if (!exit1_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->exit_img[0] = mlx_texture_to_image(game->mlx, exit1_text);
 	if (!game->exit_img[0])
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(exit1_text);
 	exit2_text = mlx_load_png("./tiles/exit2.png");
 	if (!exit2_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->exit_img[1] = mlx_texture_to_image(game->mlx, exit2_text);
 	if (!game->exit_img[1])
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(exit2_text);
 }
 
@@ -49,17 +49,17 @@ void	get_tile_images(t_game *game)
 
 	floor_text = mlx_load_png("./tiles/floor.png");
 	if (!floor_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->floor_img = mlx_texture_to_image(game->mlx, floor_text);
 	if (!game->floor_img)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(floor_text);
 	wall_text = mlx_load_png("./tiles/wall.png");
 	if (!wall_text)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	game->wall_img = mlx_texture_to_image(game->mlx, wall_text);
 	if (!game->wall_img)
-        return ; // error_exit_MLX
+        error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	mlx_delete_texture(wall_text);
 	get_exit_img(game);
 }

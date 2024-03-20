@@ -71,18 +71,13 @@ void	parse_map(t_game *game)
 	game->map_file_str = get_map_str(game);
 	if (game->map_file_str == NULL)
 		error_exit(game, NULL, "Map-file is empty"); 
-
 	line_count = validate_map(game, game->map_file_str);
-
-	
 	i = 0;
 	while (game->map_file_str[i] != '\n')
 		i++;
 	line_len = i;
-
 	game->map_height = line_count;
 	game->map_width = line_len;
-	
 	set_map(game, game->map_file_str, line_count, line_len);
 	flood_fill(game);
 }

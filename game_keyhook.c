@@ -102,7 +102,7 @@ void	move_player(t_game *game, char c)
 	ft_printf("Number of movements: %d\n", ++counter);
 }
 
-int	check_for_wall(t_game *game, int num)
+int	check_wall(t_game *game, int num)
 {
 	int	x;
 	int	y;
@@ -128,13 +128,13 @@ void	game_keyhook(mlx_key_data_t keydata, void *param)
 	game = param;
 	if (game->collectible_count != -3)
 	{
-		if (keydata.key == MLX_KEY_W && keydata.action == MLX_PRESS && check_for_wall(game, 1) == 0)
+		if (mlx_is_key_down(game->mlx, MLX_KEY_W) && check_wall(game, 1) == 0)
 			move_player(game, 'W');
-		if (keydata.key == MLX_KEY_S && keydata.action == MLX_PRESS && check_for_wall(game, 2) == 0)
+		if (mlx_is_key_down(game->mlx, MLX_KEY_S) && check_wall(game, 2) == 0)
 			move_player(game, 'S');
-		if (keydata.key == MLX_KEY_A && keydata.action == MLX_PRESS && check_for_wall(game, 3) == 0)
+		if (mlx_is_key_down(game->mlx, MLX_KEY_A) && check_wall(game, 3) == 0)
 			move_player(game, 'A');
-		if (keydata.key == MLX_KEY_D && keydata.action == MLX_PRESS && check_for_wall(game, 4) == 0)
+		if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0)
 			move_player(game, 'D');
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)

@@ -10,11 +10,11 @@ void	write_ending(t_game *game, char *str)
 	mlx_delete_image(game->mlx, game->c_num);
 	end_txt = mlx_put_string(game->mlx, str, 10, game->mlx->height - 50);
 	if (end_txt == NULL)
-		return ; // MLX_error_exit
+		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	end_txt2 = mlx_put_string(game->mlx, "Press ESC to exit game", \
 	10, game->mlx->height - 30);
 	if (end_txt2 == NULL)
-		return ; // MLX_error_exit
+		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 }
 
 void	is_game_over(t_game *game)
@@ -66,7 +66,7 @@ void	change_move_count_text(t_game *game, int c_count)
 		520, game->mlx->height - 30);
 		free(num);
 		if (game->c_num == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		move_count_prev = move_count;
 	}
 }
@@ -86,7 +86,7 @@ void	change_c_count_text(t_game *game, int c_count_prev, int c_count)
 		160, game->mlx->height - 30);
 		free(num);
 		if (game->c_num == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		c_count_prev = c_count;
 	}
 }
@@ -110,7 +110,7 @@ void	find_exit_in_window(t_game *game)
 			{
 				mlx_delete_image(game->mlx, game->exit_img[0]);
 				if (mlx_image_to_window(game->mlx, game->exit_img[1], j * 70, i * 70) < 0)
-					return ; // MLX_error_exit
+					error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 				mlx_set_instance_depth(&game->exit_img[1]->instances[0], 2);
 			}
 			x++;
@@ -150,11 +150,11 @@ void	is_all_collected(t_game *game, int c_count)
 		game->c_text = mlx_put_string(game->mlx, "Yay, you got them! =)", \
 		10, game->mlx->height - 50);
 		if (game->c_text == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		game->c_text2 = mlx_put_string(game->mlx, \
 		"Now, move to exit as fast as you can.  Moves left: ", 10, game->mlx->height - 30);
 		if (game->c_text2 == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		num = ft_itoa(move_count);
 		if (num == NULL)
 			sys_error_exit(game, game->mlx, "Malloc failed");
@@ -162,7 +162,7 @@ void	is_all_collected(t_game *game, int c_count)
 		520, game->mlx->height - 30);
 		free(num);
 		if (game->c_num == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		game->collectible_count = -1;
 	}
 }
@@ -185,7 +185,7 @@ void	text_hook(void *param)
 		game->c_text2 = mlx_put_string(game->mlx, "Diamond count: ", \
 		10, game->mlx->height - 30);
 		if (game->c_text2 == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		num = ft_itoa(c_count);
 		if (num == NULL)
 			sys_error_exit(game, game->mlx, "Malloc failed");
@@ -193,7 +193,7 @@ void	text_hook(void *param)
 		160, game->mlx->height - 30);
 		free(num);
 		if (game->c_num == NULL)
-			return ; // MLX_error_exit
+			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		text_flag = 1;
 	}
 	is_all_collected(game, c_count);

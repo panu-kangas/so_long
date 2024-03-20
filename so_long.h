@@ -10,13 +10,13 @@
 
 typedef struct s_map
 {
-	char	type;	// 0 = floor, 1 = wall, P = Player, C = Collectible, E = exit
-	int		flood_fill; // 0 = not checked, 1 = filled, -1 = not fillable
+	char	type;
+	int		flood_fill;
 	int		dist_to_player;
 	int		c_instance;
 }			t_map;
 
-typedef struct s_game
+typedef struct s_game // CHECK THAT ALL IS NEEDED !!
 {
 	mlx_t		*mlx;
 	mlx_image_t	*floor_img;
@@ -44,10 +44,9 @@ typedef struct s_game
 	int			c_count;
 }			t_game;
 
-// void		draw_all(t_game *game);
 void		check_args(t_game *game, int argc, char **argv);
-void		error_exit(t_game *game, mlx_t *mlx, char *err_str);
-void		sys_error_exit(t_game *game, mlx_t *mlx, char *err_str);
+void		error_exit(t_game *game, mlx_t *mlx, const char *err_str);
+void		sys_error_exit(t_game *game, mlx_t *mlx, const char *err_str);
 void		parse_map(t_game *game);
 void		ft_free_game_struct(t_game *game);
 char		*get_map_str(t_game *game);
@@ -66,6 +65,5 @@ void		draw_wall(t_game *game, int *draw_coord);
 void		draw_player(t_game *game, int *draw_coord);
 void		draw_collectible(t_game *game, int x, int y, int *draw_coord);
 void		draw_exit(t_game *game, int *draw_coord);
-
 
 #endif

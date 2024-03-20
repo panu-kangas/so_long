@@ -1,19 +1,5 @@
 #include "so_long.h"
 
-/* void 	close_hook(void *param) // IS THIS NEEDED ?!
-{
-	t_game		*game;
-
-	game = param;
-
-	mlx_terminate(game->mlx);
-
-	if (game->map_file_fd >= 0)
-		close(game->map_file_fd);
-	ft_free_game_struct(game);
-	exit(0);
-} */
-
 void	get_c_count(t_game *game)
 {
 	int	i;
@@ -33,14 +19,33 @@ void	set_window_size(t_game *game)
 	game->window_height = game->map_height * 70;
 	if (game->window_width > 1050)
 	{
-		game->window_width = 1050; // Check the max value !
+		game->window_width = 1050;
 		game->map_is_big = 1;
 	}
 	if (game->window_height > 700)
 	{
-		game->window_height = 700; // Check the max value !
+		game->window_height = 700;
 		game->map_is_big = 1;
 	}
+}
+
+void	check_args(t_game *game, int argc, char **argv)
+{
+	char	*temp;
+
+	if (argc != 2)
+		error_exit(game, NULL, \
+		"Invalid number of arguments! Insert one map-file.");
+	temp = ft_strrchr(argv[1], '.');
+	if (temp == NULL)
+		error_exit(game, NULL, \
+		"Invalid file type! Only files with '.ber' extension are accepted");
+	if (ft_strncmp(temp, ".ber", 5) != 0)
+		error_exit(game, NULL, \
+		"Invalid file type! Only files with '.ber' extension are accepted");
+	game->map_file_fd = open(argv[1], O_RDONLY);
+	if (game->map_file_fd < 0)
+		sys_error_exit(game, NULL, "Open failed");
 }
 
 void	init_game_struct(t_game *game)
@@ -83,22 +88,15 @@ int	main(int argc, char *argv[])
 	window_height = game->window_height;
 	game->mlx = mlx_init(window_width, window_height + 50, "so_long", false);
 	if (!game->mlx)
-		return (1); // error_exit, should this be like a separate MLX-error -function...?
+		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	get_c_count(game);
 	draw_map(game);
-
-
 	mlx_loop_hook(game->mlx, &text_hook, game);
 	mlx_key_hook(game->mlx, &game_keyhook, game);
-//	mlx_close_hook(game->mlx, &close_hook, game); // IS THIS NEEDED ?!
-
-
 	mlx_loop(game->mlx);
 	mlx_terminate(game->mlx);
-
 	if (game->map_file_fd >= 0)
 		close(game->map_file_fd);
 	ft_free_game_struct(game);
-	
 	return (0);
 }
