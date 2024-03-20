@@ -37,7 +37,7 @@ typedef struct s_game // CHECK THAT ALL IS NEEDED !!
 	int			window_width;
 	int			collectible_count;
 	int			player_coord[2];
-	int			exit_coord[2];
+	int			exit_co[2];
 	int			draw_coord[2];
 	int			f_count;
 	int			w_count;
@@ -59,11 +59,16 @@ void		game_keyhook(mlx_key_data_t keydata, void *param);
 int			get_x_start(t_game *game);
 int			get_y_start(t_game *game);
 void		draw_map(t_game *game);
-void 		draw_images(t_game *game);
+void		draw_images(t_game *game);
 void		draw_floor(t_game *game, int *draw_coord);
 void		draw_wall(t_game *game, int *draw_coord);
 void		draw_player(t_game *game, int *draw_coord);
 void		draw_collectible(t_game *game, int x, int y, int *draw_coord);
 void		draw_exit(t_game *game, int *draw_coord);
+int			is_close_to_wall(t_game *game, char c);
+int			check_wall(t_game *game, int num);
+void		delete_text_images(t_game *game);
+void		is_game_over(t_game *game);
+int			move_count_to_window(t_game *game, int move_count);
 
 #endif

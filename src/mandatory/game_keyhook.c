@@ -17,12 +17,11 @@ void	check_for_collectible(t_game *game)
 		game->collectible_img->instances[instance].enabled = 0;
 		game->map[player_y][player_x].type = '0';
 	}
-	exit_x = game->exit_coord[0];
-	exit_y = game->exit_coord[1];
+	exit_x = game->exit_co[0];
+	exit_y = game->exit_co[1];
 	if (game->collectible_count == -2)
 		game->map[exit_y][exit_x].dist_to_player--;
 }
-
 
 void	redraw_map(t_game *game, char c)
 {
@@ -40,7 +39,7 @@ void	redraw_map(t_game *game, char c)
 	mlx_delete_image(game->mlx, game->wall_img);
 	game->wall_img = NULL;
 	mlx_delete_image(game->mlx, game->player_img);
-	game->player_img = NULL; 
+	game->player_img = NULL;
 	mlx_delete_image(game->mlx, game->collectible_img);
 	game->collectible_img = NULL;
 	mlx_delete_image(game->mlx, game->exit_img[0]);
@@ -75,21 +74,6 @@ void	move_p_img(t_game *game, char c)
 	check_for_collectible(game);
 }
 
-int		is_close_to_wall(t_game *game, char c)
-{
-	int	player_x;
-	int	player_y;
-
-	player_x = game->player_coord[0];
-	player_y = game->player_coord[1];
-
-	if ((c == 'W' || c == 'S') && (player_y <= 3 || player_y >= game->map_height - 5))
-		return (0);
-	if ((c == 'A' || c == 'D') && (player_x <= 6 || player_x >= game->map_width - 7))
-		return (0);
-	return (1);
-}
-
 void	move_player(t_game *game, char c)
 {
 	static int	counter;
@@ -98,27 +82,7 @@ void	move_player(t_game *game, char c)
 		move_p_img(game, c);
 	else
 		redraw_map(game, c);
-
 	ft_printf("Number of movements: %d\n", ++counter);
-}
-
-int	check_wall(t_game *game, int num)
-{
-	int	x;
-	int	y;
-
-	x = game->player_coord[0];
-	y = game->player_coord[1];
-	
-	if (num == 1 && game->map[y - 1][x].type == '1')
-		return (1);
-	else if (num == 2 && game->map[y + 1][x].type == '1')
-		return (1);
-	else if (num == 3 && game->map[y][x - 1].type == '1')
-		return (1);
-	else if (num == 4 && game->map[y][x + 1].type == '1')
-		return (1);
-	return (0);
 }
 
 void	game_keyhook(mlx_key_data_t keydata, void *param)

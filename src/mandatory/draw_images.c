@@ -4,7 +4,7 @@ void	check_map_type(t_game *game, int x, int y)
 {
 	if (x == game->player_coord[0] && y == game->player_coord[1])
 	{
-		if (x == game->exit_coord[0] && y == game->exit_coord[1])
+		if (x == game->exit_co[0] && y == game->exit_co[1])
 			draw_exit(game, game->draw_coord);
 		else
 			draw_floor(game, game->draw_coord);

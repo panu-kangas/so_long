@@ -74,8 +74,6 @@ void	init_game_struct(t_game *game)
 int	main(int argc, char *argv[])
 {
 	t_game	*game;
-	int		window_width;
-	int		window_height;
 
 	game = malloc(1 * sizeof(t_game));
 	if (game == NULL)
@@ -84,9 +82,8 @@ int	main(int argc, char *argv[])
 	check_args(game, argc, argv);
 	parse_map(game);
 	set_window_size(game);
-	window_width = game->window_width;
-	window_height = game->window_height;
-	game->mlx = mlx_init(window_width, window_height + 50, "so_long", false);
+	game->mlx = mlx_init(game->window_width, game->window_height + 50, \
+	"so_long", false);
 	if (!game->mlx)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	get_c_count(game);

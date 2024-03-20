@@ -113,6 +113,5 @@ int	validate_map(t_game *game, char *map_file_str)
 		error_exit(game, NULL, "Map too small; at least three columns needed");
 	check_characters(game, map_file_str);
 	check_surround(game, map_file_str, line_count, i);
-
-	return (line_count); 
+	return (line_count);
 }

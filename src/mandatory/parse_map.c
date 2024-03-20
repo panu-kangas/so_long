@@ -1,6 +1,6 @@
 #include "so_long.h"
 
-void		mark_map(t_game *game, int x, int y, char c)
+void	mark_map(t_game *game, int x, int y, char c)
 {
 	if (c == '0')
 		game->map[y][x].type = '0';
@@ -11,8 +11,8 @@ void		mark_map(t_game *game, int x, int y, char c)
 	else if (c == 'E')
 	{
 		game->map[y][x].type = 'E';
-		game->exit_coord[0] = x;
-		game->exit_coord[1] = y;
+		game->exit_co[0] = x;
+		game->exit_co[1] = y;
 	}
 	else if (c == 'P')
 	{
@@ -70,7 +70,7 @@ void	parse_map(t_game *game)
 
 	game->map_file_str = get_map_str(game);
 	if (game->map_file_str == NULL)
-		error_exit(game, NULL, "Map-file is empty"); 
+		error_exit(game, NULL, "Map-file is empty");
 	line_count = validate_map(game, game->map_file_str);
 	i = 0;
 	while (game->map_file_str[i] != '\n')

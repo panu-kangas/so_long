@@ -37,7 +37,7 @@ char	*get_map_str(t_game *game)
 	{
 		bytes = read(game->map_file_fd, buf, 100);
 		if (bytes == -1 || bytes == 0)
-			break;
+			break ;
 		map_str = get_str(map_str, buf, bytes);
 		if (map_str == NULL)
 			sys_error_exit(game, NULL, "Malloc failed");

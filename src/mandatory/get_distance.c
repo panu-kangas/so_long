@@ -34,11 +34,11 @@ void	loop_map(t_game *game, int x, int y, int i)
 			if (game->map[y][x].dist_to_player != -1)
 				mark_dist(game, x, y, i);
 			if (x == game->map_width - 1)
-				break;
+				break ;
 			x++;
 		}
 		if (y == game->map_height - 1)
-			break;
+			break ;
 		y++;
 	}
 }
@@ -57,9 +57,8 @@ void	get_dist(t_game *game, int x, int y)
 		game->map[y][x + 1].dist_to_player = 1;
 	if (game->map[y][x - 1].dist_to_player != -1)
 		game->map[y][x - 1].dist_to_player = 1;
-	exit_x = game->exit_coord[0];
-	exit_y = game->exit_coord[1];
-
+	exit_x = game->exit_co[0];
+	exit_y = game->exit_co[1];
 	i = 1;
 	while (game->map[exit_y][exit_x].dist_to_player == 0)
 	{

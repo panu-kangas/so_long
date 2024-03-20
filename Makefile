@@ -2,12 +2,14 @@ NAME	= so_long
 CFLAGS	= -Wextra -Wall -Werror
 LIBMLX	= ./lib/MLX42
 LIBFT	= ./lib/libft
+MAND	= ./src/mandatory
 
 HEADERS	= -I $(LIBMLX)/include -I $(LIBFT)
-LIBS	= $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a -ldl -lglfw -pthread -lm
+LIBS	= $(LIBMLX)/build/libmlx42.a $(LIBFT)/libft.a -ldl -pthread -lm -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
 
-SRCS	= main.c draw_map.c draw_utils.c error_handling.c parse_map.c utils.c validate_map.c flood_fill.c \
-			get_distance.c text_hook.c game_keyhook.c draw_images.c
+SRCS	= $(MAND)/main.c $(MAND)/draw_images.c $(MAND)/draw_map.c $(MAND)/draw_sprites.c $(MAND)/draw_tiles.c \
+		  $(MAND)/error_handling.c $(MAND)/parse_map.c $(MAND)/utils.c $(MAND)/validate_map.c $(MAND)/flood_fill.c \
+		  $(MAND)/get_distance.c $(MAND)/text_hook.c $(MAND)/text_hook_2.c $(MAND)/game_keyhook.c $(MAND)/game_keyhook_utils.c
 OBJS	= ${SRCS:.c=.o}
 
 all: libmlx libft $(NAME)
