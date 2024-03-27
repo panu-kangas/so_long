@@ -1,7 +1,26 @@
 #include "so_long_bonus.h"
 
+int	check_enemy_coord(t_game *game, int x, int y)
+{
+	int	i;
+
+	i = 0;
+	while (i < game->enemy_count)
+	{
+		if (game->enemy_coord[i][0] == x && game->enemy_coord[i][1] == y)
+		{
+			check_for_hit(game);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 void	check_map_type(t_game *game, int x, int y, int flag)
 {
+	if (check_enemy_coord(game, x, y) == 1)
+		draw_enemy(game, game->draw_coord);
 	if (x == game->player_coord[0] && y == game->player_coord[1])
 	{
 		if (x == game->exit_co[0] && y == game->exit_co[1])
@@ -65,6 +84,7 @@ void	draw_images(t_game *game, int flag)
 	game->f_count = 0;
 	game->w_count = 0;
 	game->c_count = 0;
+	game->e_count = 0;
 	width = game->window_width / 70;
 	height = game->window_height / 70;
 	y = get_y_start(game);

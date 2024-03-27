@@ -37,7 +37,7 @@ void	attack_animation(t_game *game)
 		if (mlx_image_to_window(game->mlx, game->attack_img[0], \
 		x, y) < 0)
 			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-		mlx_set_instance_depth(&game->attack_img[0]->instances[0], 4);
+		mlx_set_instance_depth(&game->attack_img[0]->instances[0], 3);
 		flag = 1;
 	}
 	else if (flag == 1)
@@ -46,7 +46,7 @@ void	attack_animation(t_game *game)
 		if (mlx_image_to_window(game->mlx, game->attack_img[1], \
 		x, y) < 0)
 			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-		mlx_set_instance_depth(&game->attack_img[1]->instances[0], 4);
+		mlx_set_instance_depth(&game->attack_img[1]->instances[0], 3);
 		flag = 2;
 	}
 	else
@@ -92,10 +92,6 @@ void	player_animation(t_game *game)
 	int			x;
 	int			y;
 
-	if (game->attack == 1)
-		attack_animation(game);
-	else
-	{
 	x = game->player_img[i]->instances[0].x;
 	y = game->player_img[i]->instances[0].y;
 	mlx_delete_image(game->mlx, game->player_img[i]);
@@ -112,20 +108,117 @@ void	player_animation(t_game *game)
 	i++;
 	if (i == 7)
 		i = 0;
+}
+
+void	set_collectible_image(t_game *game, int i)
+{
+	mlx_texture_t	*collectible_text;
+	
+	if (i == 0)
+		collectible_text = mlx_load_png("./sprites/animations/collectible1.png");
+	else if (i == 1)
+		collectible_text = mlx_load_png("./sprites/animations/collectible2.png");
+	else if (i == 2)
+		collectible_text = mlx_load_png("./sprites/animations/collectible3.png");
+	else if (i == 3)
+		collectible_text = mlx_load_png("./sprites/animations/collectible4.png");
+	else if (i == 4)
+		collectible_text = mlx_load_png("./sprites/animations/collectible5.png");
+	else
+		collectible_text = mlx_load_png("./sprites/animations/collectible6.png");
+	if (!collectible_text)
+		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
+	game->collectible_img[i] = mlx_texture_to_image(game->mlx, collectible_text);
+	if (!game->collectible_img[i])
+		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
+	mlx_delete_texture(collectible_text);
+}
+
+void	collectible_animation(t_game *game)
+{
+	static int	i;
+	static int	flag;
+	int			draw_co[2];
+	int			x;
+	int			y;
+	int			instance;
+
+	y = get_y_start(game);
+	draw_co[1] = 0;
+	instance = 0;
+	mlx_delete_image(game->mlx, game->collectible_img[i]);
+	if (flag == 0)
+		set_collectible_image(game, i + 1);
+	else if (flag == -1)
+		set_collectible_image(game, i - 1);
+	while (draw_co[1] < game->window_height)
+	{
+		x = get_x_start(game);
+		draw_co[0] = 0;
+		while (draw_co[0] < game->window_width)
+		{
+			if (game->map[y][x].type == 'C')
+			{
+				if (flag == 0)
+				{			
+					if (mlx_image_to_window(game->mlx, game->collectible_img[i + 1], \
+					draw_co[0] + 24, draw_co[1] + 27) < 0)
+						error_exit(game, game->mlx, mlx_strerror(mlx_errno));
+					mlx_set_instance_depth(&game->collectible_img[i + 1]->instances[instance], 2);
+				}
+				if (flag == -1)
+				{			
+					if (mlx_image_to_window(game->mlx, game->collectible_img[i - 1], \
+					draw_co[0] + 24, draw_co[1] + 27) < 0)
+						error_exit(game, game->mlx, mlx_strerror(mlx_errno));
+					mlx_set_instance_depth(&game->collectible_img[i - 1]->instances[instance], 2);
+				}
+				game->map[y][x].c_instance = instance;
+				instance++;
+			}
+			x++;
+			draw_co[0] += 70;
+		}
+		y++;
+		draw_co[1] += 70;
 	}
+	if (flag == 0)
+	{
+		i++;
+		if (i == 5)
+			flag = -1;
+	}
+	else if (flag == -1)
+	{
+		i--;
+		if (i == 0)
+			flag = 0;
+	}
+	game->collectible_img_i = i;
 }
 
 void	animation_hook(void *param)
 {
 	t_game			*game;
 	static double	prev_time;
+	static double	prev_hammer_time;
 	double			time;
 
 	game = param;
 	time = mlx_get_time();
+
+	if (time > prev_hammer_time + 0.1 && game->collectible_count != -3)
+	{
+		if (game->attack == 1)
+			attack_animation(game);
+		prev_hammer_time = time ;
+	}
+
 	if (time > prev_time + 0.15 && game->collectible_count != -3)
 	{
-		player_animation(game);
+		if (game->attack == 0)
+			player_animation(game);
+		collectible_animation(game);
 		prev_time = time;
 	}
 }

@@ -3,8 +3,11 @@
 void	get_sprite_images(t_game *game, int flag)
 {
 	mlx_texture_t	*player_text;
-	mlx_texture_t	*collectible_text;
+	int				i_c;
+	int				i_e;
 
+	i_c = game->collectible_img_i;
+	i_e = game->enemy_img_i;
 	if (flag == 0)
 	{
 		player_text = mlx_load_png("./sprites/animations/player1.png");
@@ -15,13 +18,8 @@ void	get_sprite_images(t_game *game, int flag)
 			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 		mlx_delete_texture(player_text);
 	}
-	collectible_text = mlx_load_png("./sprites/collectible.png");
-	if (!collectible_text)
-		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-	game->collectible_img = mlx_texture_to_image(game->mlx, collectible_text);
-	if (!game->collectible_img)
-		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-	mlx_delete_texture(collectible_text);
+	set_collectible_image(game, i_c);
+	set_enemy_image(game, i_e);
 }
 
 void	get_exit_img(t_game *game)

@@ -26,7 +26,7 @@ void	draw_wall(t_game *game, int *draw_coord)
 
 void	draw_big_map_exit(t_game *game, int *draw_coord)
 {
-	if (game->collectible_count > 0)
+	if (game->collectible_count > 0 || game->collectible_count == -3)
 	{
 		if (mlx_image_to_window(game->mlx, game->exit_img[0], \
 		draw_coord[0], draw_coord[1]) < 0)

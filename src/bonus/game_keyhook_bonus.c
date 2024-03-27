@@ -14,7 +14,7 @@ void	check_for_collectible(t_game *game)
 	{
 		game->collectible_count--;
 		instance = game->map[player_y][player_x].c_instance;
-		game->collectible_img->instances[instance].enabled = 0;
+		game->collectible_img[game->collectible_img_i]->instances[instance].enabled = 0;
 		game->map[player_y][player_x].type = '0';
 	}
 	exit_x = game->exit_co[0];
@@ -52,17 +52,23 @@ void	redraw_map(t_game *game, char c)
 		if (game->player_coord[0] == game->map_width - 7)
 			game->player_img[i]->instances[0].x += 70;
 	}
+
+	check_for_hit(game);
 	check_for_collectible(game);
+
 	mlx_delete_image(game->mlx, game->floor_img);
 	game->floor_img = NULL;
 	mlx_delete_image(game->mlx, game->wall_img);
 	game->wall_img = NULL;
-	mlx_delete_image(game->mlx, game->collectible_img);
-	game->collectible_img = NULL;
+	mlx_delete_image(game->mlx, game->collectible_img[game->collectible_img_i]);
+	game->collectible_img[game->collectible_img_i] = NULL;
 	mlx_delete_image(game->mlx, game->exit_img[0]);
 	game->exit_img[0] = NULL;
 	mlx_delete_image(game->mlx, game->exit_img[1]);
 	game->exit_img[1] = NULL;
+	mlx_delete_image(game->mlx, game->enemy_img[0]);
+	game->enemy_img[0] = NULL;
+	
 	draw_map(game, 1);
 }
 
@@ -91,6 +97,8 @@ void	move_p_img(t_game *game, char c)
 		game->player_img[i]->instances[0].x += 70;
 		game->player_coord[0] += 1;
 	}
+
+	check_for_hit(game);
 	check_for_collectible(game);
 }
 
@@ -110,13 +118,33 @@ void	move_player(t_game *game, char c)
 	if (num == NULL)
 		sys_error_exit(game, game->mlx, "Malloc failed");
 	game->total_moves = mlx_put_string(game->mlx, num, \
-	200, game->mlx->height - 20);
+	190, 0);
 	free(num);
 	if (game->total_moves == NULL)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 
 //	ft_printf("Number of movements: %d\n", ++counter); --> IS THIS NEEDED ??
 }
+
+
+
+void	check_hammer_hit(t_game *game)
+{
+	int	i;
+
+	game->attack = 1;
+	i = 0;
+	while (i < game->enemy_count)
+	{
+		if (game->enemy_coord[i][0] == game->player_coord[0] + 1 \
+		&& game->enemy_coord[i][1] == game->player_coord[1])
+		{
+			game->enemy_coord[i][0] = -1;
+		}
+		i++;
+	}
+}
+
 
 void	game_keyhook(mlx_key_data_t keydata, void *param)
 {
@@ -133,8 +161,8 @@ void	game_keyhook(mlx_key_data_t keydata, void *param)
 			move_player(game, 'A');
 		if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0)
 			move_player(game, 'D');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_R))
-			game->attack = 1;
+		if (mlx_is_key_down(game->mlx, MLX_KEY_H))
+			check_hammer_hit(game);
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{

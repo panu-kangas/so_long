@@ -17,7 +17,8 @@ BONSRCS	= $(BONUS)/main_bonus.c $(BONUS)/draw_images_bonus.c $(BONUS)/draw_map_b
 		  $(BONUS)/draw_tiles_bonus.c $(BONUS)/error_handling_bonus.c $(BONUS)/parse_map_bonus.c \
 		  $(BONUS)/utils_bonus.c $(BONUS)/validate_map_bonus.c $(BONUS)/flood_fill_bonus.c \
 		  $(BONUS)/get_distance_bonus.c $(BONUS)/text_hook_bonus.c $(BONUS)/text_hook_2_bonus.c \
-		  $(BONUS)/game_keyhook_bonus.c $(BONUS)/game_keyhook_utils_bonus.c $(BONUS)/animations_bonus.c
+		  $(BONUS)/game_keyhook_bonus.c $(BONUS)/game_keyhook_utils_bonus.c $(BONUS)/animations_bonus.c \
+		  $(BONUS)/enemy_bonus.c
 BONOBJS	= ${BONSRCS:.c=.o}
 
 all: $(LIBMLX) $(LIBFT) $(NAME)

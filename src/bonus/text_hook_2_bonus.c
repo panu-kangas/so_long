@@ -10,7 +10,7 @@ int	move_count_to_window(t_game *game, int move_count)
 	if (num == NULL)
 		sys_error_exit(game, game->mlx, "Malloc failed");
 	game->c_num = mlx_put_string(game->mlx, num, \
-	130, game->mlx->height - 40);
+	120, game->mlx->height - 20);
 	free(num);
 	num = NULL;
 	if (game->c_num == NULL)
@@ -26,11 +26,11 @@ void	write_ending(t_game *game, char *str)
 	mlx_delete_image(game->mlx, game->c_text);
 	mlx_delete_image(game->mlx, game->c_text2);
 	mlx_delete_image(game->mlx, game->c_num);
-	end_txt = mlx_put_string(game->mlx, str, 10, game->mlx->height - 60);
+	end_txt = mlx_put_string(game->mlx, str, 0, game->mlx->height - 40);
 	if (end_txt == NULL)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 	end_txt2 = mlx_put_string(game->mlx, "Press ESC to exit", \
-	10, game->mlx->height - 40);
+	0, game->mlx->height - 20);
 	if (end_txt2 == NULL)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
 }
