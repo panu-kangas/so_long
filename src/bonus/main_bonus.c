@@ -1,42 +1,78 @@
 #include "so_long_bonus.h"
 
-void	set_enemies(t_game *game)
+int	check_start_coords(t_game *game, int i, int x, int y)
 {
-	// I could have some sort of system to change this value in the beginning of game.
-	// For example: player could choose to play on Easy, Hard or God mode -difficulty level.
-	game->enemy_count = 2;
-
-	game->enemy_img_i = 0;
-
-	// randomize these! use srand() && rand(). 
-	// conditions: enemy x & y cannot be +/- 2 from player. Enemy can't be in a wall.
-	// Enemy can't be surrounded by walls!!
-	game->enemy_coord[0][0] = 1;
-	game->enemy_coord[0][1] = 1;
-	game->enemy_coord[0][2] = -1;
-	game->enemy_coord[0][3] = -1;
-	game->enemy_coord[0][4] = 0;
-
-	game->enemy_coord[1][0] = 1;
-	game->enemy_coord[1][1] = 8;
-	game->enemy_coord[1][2] = -1;
-	game->enemy_coord[1][3] = -1;
-	game->enemy_coord[1][4] = 1;
-
-/*	game->enemy_coord[2][0] = 9;
-	game->enemy_coord[2][1] = 9;
-	game->enemy_coord[2][2] = -1;
-	game->enemy_coord[2][3] = -1;
-	game->enemy_coord[2][4] = 2;
-
-	game->enemy_coord[3][0] = 12;
-	game->enemy_coord[3][1] = 12;
-	game->enemy_coord[3][2] = -1;
-	game->enemy_coord[3][3] = -1;
-	game->enemy_coord[3][4] = 3;  */
+	if (game->enemy_count == 1)
+		return (0);
+	while (--i > -1)
+	{
+		if (x == game->enemies[i].x && y == game->enemies[i].y)
+			return (1);
+	}
+	if (x >= game->player_coord[0] - 2 && x <= game->player_coord[0] + 2 && \
+	y >= game->player_coord[1] - 2 && y <= game->player_coord[1] + 2)
+		return (1);
+	else
+		return (0);
 }
 
-void	get_c_count(t_game *game)
+int	get_rand_coord(t_game *game, char xy)
+{
+	int			coord;
+	int			max;
+
+	if (xy == 'x')
+		max = game->map_width - 1;
+	else
+		max = game->map_height - 1;
+
+	coord = rand() % max;
+
+	return (coord);
+}
+
+void	set_enemies(t_game *game)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	// I could have some sort of system to change this value in the beginning of game.
+	// For example: player could choose to play on Easy, Hard or God mode -difficulty level.
+
+	game->enemy_count = (game->f_count + game->collectible_count) / 10;
+	if (game->enemy_count == 0)
+		game->enemy_count++;
+	game->enemy_img_i = 0;
+
+	game->enemies = malloc(game->enemy_count * sizeof(t_enemy));
+	if (game->enemies == NULL)
+		sys_error_exit(game, NULL, "Malloc failed");
+
+	i = 0;
+	while (i < game->enemy_count)
+	{
+		x = 0;
+		y = 0;
+		while (game->map[y][x].type == '1' || game->map[y][x].type == 'P' || check_start_coords(game, i, x, y) == 1)
+		{
+			x = get_rand_coord(game, 'x');
+			y = get_rand_coord(game, 'y');
+			// Enemy can't be surrounded by walls!! --> does this matter...?
+		}
+		game->enemies[i].x = x;
+		game->enemies[i].y = y;
+		game->enemies[i].direction = -1;
+		game->enemies[i].step_count = -1;
+		game->enemies[i].is_dying = 0;
+		game->enemies[i].is_dead = 0;
+		i++;
+	}
+
+
+}
+
+void	get_c_f_count(t_game *game)
 {
 	int	i;
 
@@ -45,6 +81,8 @@ void	get_c_count(t_game *game)
 	{
 		if (game->map_file_str[i] == 'C')
 			game->collectible_count++;
+		else if (game->map_file_str[i] == '0')
+			game->f_count++;
 		i++;
 	}
 }
@@ -100,6 +138,7 @@ void	init_game_struct(t_game *game)
 	game->c_num = NULL;
 	game->map = NULL;
 	game->map_file_str = NULL;
+	game->left_right = 'R';
 	game->map_file_fd = -2;
 	game->map_is_big = 0;
 	game->map_height = 0;
@@ -107,6 +146,7 @@ void	init_game_struct(t_game *game)
 	game->window_height = 0;
 	game->window_width = 0;
 	game->collectible_count = 0;
+	game->f_count = 0;
 	game->draw_coord[0] = 0;
 	game->draw_coord[1] = 0;
 	game->collectible_img_i = 0;
@@ -134,7 +174,7 @@ int	main(int argc, char *argv[])
 	"so_long", false);
 	if (!game->mlx)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-	get_c_count(game);
+	get_c_f_count(game);
 	set_enemies(game);
 	draw_map(game, 0);
 

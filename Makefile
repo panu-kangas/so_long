@@ -1,5 +1,5 @@
 NAME	= so_long
-CFLAGS	= -Wextra -Wall -Werror
+CFLAGS	= -Wextra -Wall -Werror -g # Remove extra flag
 LIBMLX	= ./lib/MLX42/build/libmlx42.a
 LIBFT	= ./lib/libft/libft.a
 MAND	= ./src/mandatory

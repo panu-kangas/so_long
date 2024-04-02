@@ -17,6 +17,17 @@ typedef struct s_map
 	int		c_instance;
 }			t_map;
 
+typedef struct s_enemy
+{
+	int	x;
+	int	y;
+	int	direction;
+	int	step_count;
+	int	instance;
+	int	is_dying;
+	int	is_dead;
+}			t_enemy;
+
 typedef struct s_game // CHECK THAT ALL IS NEEDED !!
 {
 	mlx_t		*mlx;
@@ -33,7 +44,9 @@ typedef struct s_game // CHECK THAT ALL IS NEEDED !!
 	mlx_image_t	*c_num;
 	mlx_image_t	*total_moves;
 	t_map		**map;
+	t_enemy		*enemies;
 	char		*map_file_str;
+	char		left_right;
 	int			map_file_fd;
 	int			map_is_big;
 	int			map_height;
@@ -43,7 +56,6 @@ typedef struct s_game // CHECK THAT ALL IS NEEDED !!
 	int			collectible_count;
 	int			enemy_count;
 	int			player_coord[2];
-	int			enemy_coord[4][5]; // this will be just a pointer, and needs to be malloced.
 	int			exit_co[2];
 	int			draw_coord[2];
 	int			f_count;
@@ -76,7 +88,7 @@ void		draw_floor(t_game *game, int *draw_coord);
 void		draw_wall(t_game *game, int *draw_coord);
 void		draw_player(t_game *game, int *draw_coord);
 void		draw_collectible(t_game *game, int x, int y, int *draw_coord);
-void		draw_enemy(t_game *game, int *draw_coord);
+void		draw_enemy(t_game *game, int x, int y, int *draw_coord);
 void		draw_exit(t_game *game, int *draw_coord);
 int			is_close_to_wall(t_game *game, char c);
 int			check_wall(t_game *game, int num);
@@ -84,7 +96,6 @@ void		delete_text_images(t_game *game);
 void		is_game_over(t_game *game);
 int			move_count_to_window(t_game *game, int move_count);
 
-void		set_player_images(t_game *game);
 void		animation_hook(void *param);
 void		attack_animation(t_game *game);
 void		set_collectible_image(t_game *game, int i);
@@ -93,6 +104,8 @@ void		set_enemy_image(t_game *game, int i);
 void		enemy_hook(void *param);
 void		check_for_hit(t_game *game);
 void		write_ending(t_game *game, char *str);
+
+void		player_animation(t_game *game);
 
 
 

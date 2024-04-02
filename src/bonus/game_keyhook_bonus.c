@@ -66,8 +66,8 @@ void	redraw_map(t_game *game, char c)
 	game->exit_img[0] = NULL;
 	mlx_delete_image(game->mlx, game->exit_img[1]);
 	game->exit_img[1] = NULL;
-	mlx_delete_image(game->mlx, game->enemy_img[0]);
-	game->enemy_img[0] = NULL;
+	mlx_delete_image(game->mlx, game->enemy_img[game->enemy_img_i]);
+	game->enemy_img[game->enemy_img_i] = NULL;
 	
 	draw_map(game, 1);
 }
@@ -107,6 +107,14 @@ void	move_player(t_game *game, char c)
 	static int	counter;
 	char 		*num;
 
+	if (c == 'A' || c == 'D')
+	{
+		if (c == 'A')
+			game->left_right = 'L';
+		else if (c == 'D')
+			game->left_right = 'R';
+		player_animation(game);
+	}
 	if (game->map_is_big == 0 || is_close_to_wall(game, c) == 0)
 		move_p_img(game, c);
 	else
@@ -131,15 +139,24 @@ void	move_player(t_game *game, char c)
 void	check_hammer_hit(t_game *game)
 {
 	int	i;
+	int	dir_effect;
+	int	instance;
 
 	game->attack = 1;
+	if (game->left_right == 'R')
+		dir_effect = 1;
+	else
+		dir_effect = -1;
 	i = 0;
 	while (i < game->enemy_count)
 	{
-		if (game->enemy_coord[i][0] == game->player_coord[0] + 1 \
-		&& game->enemy_coord[i][1] == game->player_coord[1])
+		if (game->enemies[i].is_dying == 0 && \
+		game->enemies[i].x == game->player_coord[0] + dir_effect \
+		&& game->enemies[i].y == game->player_coord[1])
 		{
-			game->enemy_coord[i][0] = -1;
+			instance = game->enemies[i].instance;
+			game->enemy_img[game->enemy_img_i]->instances[instance].enabled = 0;
+			game->enemies[i].is_dying = 1;
 		}
 		i++;
 	}
@@ -148,21 +165,38 @@ void	check_hammer_hit(t_game *game)
 
 void	game_keyhook(mlx_key_data_t keydata, void *param)
 {
-	t_game		*game;
+	t_game			*game;
+	static double	prev_hammer;
+	static int		flag;
+	double			time;
 
 	game = param;
-	if (game->collectible_count != -3)
+	time = mlx_get_time();
+	if (flag == 0)
 	{
-		if (mlx_is_key_down(game->mlx, MLX_KEY_W) && check_wall(game, 1) == 0)
+		prev_hammer = time;
+		flag = 1;
+	}
+	if (game->collectible_count > -3)
+	{
+		if (mlx_is_key_down(game->mlx, MLX_KEY_W) && check_wall(game, 1) == 0 \
+		&& game->attack == 0)
 			move_player(game, 'W');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_S) && check_wall(game, 2) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_S) && check_wall(game, 2) == 0 \
+		&& game->attack == 0)
 			move_player(game, 'S');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_A) && check_wall(game, 3) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_A) && check_wall(game, 3) == 0 \
+		&& game->attack == 0)
 			move_player(game, 'A');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0 \
+		&& game->attack == 0)
 			move_player(game, 'D');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_H))
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_H) && time > prev_hammer + 0.2  \
+		&& game->attack == 0)
+		{
 			check_hammer_hit(game);
+			prev_hammer = time;
+		}
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
 	{

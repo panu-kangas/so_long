@@ -7,7 +7,8 @@ int	check_enemy_coord(t_game *game, int x, int y)
 	i = 0;
 	while (i < game->enemy_count)
 	{
-		if (game->enemy_coord[i][0] == x && game->enemy_coord[i][1] == y)
+		if (game->enemies[i].x == x && game->enemies[i].y == y && \
+		game->enemies[i].is_dying == 0)
 		{
 			check_for_hit(game);
 			return (1);
@@ -20,7 +21,7 @@ int	check_enemy_coord(t_game *game, int x, int y)
 void	check_map_type(t_game *game, int x, int y, int flag)
 {
 	if (check_enemy_coord(game, x, y) == 1)
-		draw_enemy(game, game->draw_coord);
+		draw_enemy(game, x, y, game->draw_coord);
 	if (x == game->player_coord[0] && y == game->player_coord[1])
 	{
 		if (x == game->exit_co[0] && y == game->exit_co[1])
