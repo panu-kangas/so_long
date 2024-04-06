@@ -16,7 +16,7 @@ typedef struct s_map
 	int		c_instance;
 }			t_map;
 
-typedef struct s_game // CHECK THAT ALL IS NEEDED !!
+typedef struct s_game
 {
 	mlx_t		*mlx;
 	mlx_image_t	*floor_img;

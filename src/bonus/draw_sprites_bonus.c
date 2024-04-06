@@ -39,7 +39,7 @@ void	draw_enemy(t_game *game, int x, int y, int *draw_coord)
 	while (i < game->enemy_count)
 	{
 		if (game->enemies[i].x == x && game->enemies[i].y == y)
-			break;
+			break ;
 		i++;
 	}
 	game->enemies[i].instance = e_count;

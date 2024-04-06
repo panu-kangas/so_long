@@ -8,7 +8,11 @@ void	ft_free_map(t_game *game)
 	if (game->map != NULL)
 	{
 		while (i < game->map_height)
+		{
+			if (game->map[i] == NULL)
+				break ;
 			free(game->map[i++]);
+		}
 	}
 	free(game->map);
 }

@@ -1,5 +1,5 @@
 NAME	= so_long
-CFLAGS	= -Wextra -Wall -Werror -g # Remove extra flag
+CFLAGS	= -Wextra -Wall -Werror
 LIBMLX	= ./lib/MLX42/build/libmlx42.a
 LIBFT	= ./lib/libft/libft.a
 MAND	= ./src/mandatory
@@ -18,7 +18,9 @@ BONSRCS	= $(BONUS)/main_bonus.c $(BONUS)/draw_images_bonus.c $(BONUS)/draw_map_b
 		  $(BONUS)/utils_bonus.c $(BONUS)/validate_map_bonus.c $(BONUS)/flood_fill_bonus.c \
 		  $(BONUS)/get_distance_bonus.c $(BONUS)/text_hook_bonus.c $(BONUS)/text_hook_2_bonus.c \
 		  $(BONUS)/game_keyhook_bonus.c $(BONUS)/game_keyhook_utils_bonus.c $(BONUS)/animations_bonus.c \
-		  $(BONUS)/enemy_bonus.c
+		  $(BONUS)/enemy_bonus.c $(BONUS)/attack_animation_bonus.c $(BONUS)/collectible_animation_bonus.c \
+		  $(BONUS)/enemy_utils_bonus.c $(BONUS)/enemy_movement_bonus.c $(BONUS)/keyhook_checks_bonus.c \
+		  $(BONUS)/set_enemies_bonus.c $(BONUS)/start_and_end_message_bonus.c
 BONOBJS	= ${BONSRCS:.c=.o}
 
 all: $(LIBMLX) $(LIBFT) $(NAME)

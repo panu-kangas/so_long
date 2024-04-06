@@ -65,10 +65,34 @@ void	get_tile_images(t_game *game)
 	get_exit_img(game);
 }
 
+void	draw_background(t_game *game)
+{
+	mlx_image_t	*background_up;
+	uint32_t	x;
+	uint32_t	y;
+
+	background_up = mlx_new_image(game->mlx, 240, 20);
+	y = 0;
+	while (y < background_up->height)
+	{
+		x = 0;
+		while (x < background_up->width)
+		{
+			mlx_put_pixel(background_up, x, y, ft_pixel(196, 107, 65, 255));
+			x++;
+		}
+		y++;
+	}
+	mlx_image_to_window(game->mlx, background_up, 0, 0);
+	mlx_set_instance_depth(&background_up->instances[0], 5);
+	game->background_up_img = background_up;
+}
+
 void	draw_map(t_game *game, int flag)
 {
 	get_tile_images(game);
 	get_sprite_images(game, flag);
+	draw_background(game);
 	draw_images(game, flag);
 	game->draw_coord[0] = 0;
 	game->draw_coord[1] = 0;

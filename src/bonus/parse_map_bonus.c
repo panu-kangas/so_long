@@ -3,11 +3,17 @@
 void	mark_map(t_game *game, int x, int y, char c)
 {
 	if (c == '0')
+	{
 		game->map[y][x].type = '0';
+		game->f_count++;
+	}
 	else if (c == '1')
 		game->map[y][x].type = '1';
 	else if (c == 'C')
+	{
 		game->map[y][x].type = 'C';
+		game->collectible_count++;
+	}
 	else if (c == 'E')
 	{
 		game->map[y][x].type = 'E';
