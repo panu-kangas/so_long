@@ -1,4 +1,5 @@
 NAME	= so_long
+CC		= cc
 CFLAGS	= -Wextra -Wall -Werror
 LIBMLX	= ./lib/MLX42/build/libmlx42.a
 LIBFT	= ./lib/libft/libft.a
@@ -40,7 +41,6 @@ bonus: .bonus
 	$(CC) $(BONOBJS) $(LIBS) $(HEADERS) -o $(NAME)
 	touch .bonus
 
-# is this ok ?? It is needed so that .c files can find headers
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
 

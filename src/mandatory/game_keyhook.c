@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_keyhook.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:28:12 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 17:43:35 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	check_for_collectible(t_game *game)
@@ -78,7 +90,8 @@ void	move_player(t_game *game, char c)
 {
 	static int	counter;
 
-	if (game->map_is_big == 0 || is_close_to_wall(game, c) == 0)
+	if ((game->map_x_is_big == 0 && game->map_y_is_big == 0) \
+	|| is_close_to_wall(game, c) == 0)
 		move_p_img(game, c);
 	else
 		redraw_map(game, c);
@@ -94,11 +107,11 @@ void	game_keyhook(mlx_key_data_t keydata, void *param)
 	{
 		if (mlx_is_key_down(game->mlx, MLX_KEY_W) && check_wall(game, 1) == 0)
 			move_player(game, 'W');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_S) && check_wall(game, 2) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_S) && check_wall(game, 2) == 0)
 			move_player(game, 'S');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_A) && check_wall(game, 3) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_A) && check_wall(game, 3) == 0)
 			move_player(game, 'A');
-		if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0)
+		else if (mlx_is_key_down(game->mlx, MLX_KEY_D) && check_wall(game, 4) == 0)
 			move_player(game, 'D');
 	}
 	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)

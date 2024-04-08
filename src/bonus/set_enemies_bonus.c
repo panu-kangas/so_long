@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_enemies_bonus.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:34:29 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:34:30 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long_bonus.h"
 
 int	check_start_coords(t_game *game, int i, int x, int y)
@@ -14,7 +26,9 @@ int	check_start_coords(t_game *game, int i, int x, int y)
 	{
 		while (--i > -1)
 		{
-			if (x == game->enemies[i].x && y == game->enemies[i].y)
+			if ((game->enemies[i].x <= x + 1 && game->enemies[i].x >= x - 1) \
+			&& \
+			(game->enemies[i].y <= y + 1 && game->enemies[i].y >= y - 1))
 				return (1);
 		}
 		if (x >= game->player_coord[0] - 2 && x <= game->player_coord[0] + 2 && \

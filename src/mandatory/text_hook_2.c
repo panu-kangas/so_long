@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   text_hook_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:29:16 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:29:20 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 int	move_count_to_window(t_game *game, int move_count)
@@ -95,7 +107,7 @@ void	delete_text_images(t_game *game)
 	game->c_text2 = NULL;
 	mlx_delete_image(game->mlx, game->c_num);
 	game->c_num = NULL;
-	if (game->map_is_big == 0)
+	if (game->map_x_is_big == 0 && game->map_y_is_big == 0)
 		mlx_set_instance_depth(&game->exit_img[1]->instances[0], 2);
 	else
 		find_exit_in_window(game);

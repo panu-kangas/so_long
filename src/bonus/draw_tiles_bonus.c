@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_tiles_bonus.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:32:27 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:32:28 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long_bonus.h"
 
 void	draw_floor(t_game *game, int *draw_coord)
@@ -44,7 +56,7 @@ void	draw_big_map_exit(t_game *game, int *draw_coord)
 
 void	draw_exit(t_game *game, int *draw_coord)
 {
-	if (game->map_is_big == 0)
+	if (game->map_x_is_big == 0 && game->map_y_is_big == 0)
 	{
 		if (mlx_image_to_window(game->mlx, game->exit_img[0], \
 		draw_coord[0], draw_coord[1]) < 0)

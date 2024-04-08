@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:28:40 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:28:42 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	get_c_count(t_game *game)
@@ -20,12 +32,12 @@ void	set_window_size(t_game *game)
 	if (game->window_width > 1050)
 	{
 		game->window_width = 1050;
-		game->map_is_big = 1;
+		game->map_x_is_big = 1;
 	}
 	if (game->window_height > 700)
 	{
 		game->window_height = 700;
-		game->map_is_big = 1;
+		game->map_y_is_big = 1;
 	}
 }
 
@@ -61,7 +73,8 @@ void	init_game_struct(t_game *game)
 	game->map = NULL;
 	game->map_file_str = NULL;
 	game->map_file_fd = -2;
-	game->map_is_big = 0;
+	game->map_x_is_big = 0;
+	game->map_y_is_big = 0;
 	game->map_height = 0;
 	game->map_width = 0;
 	game->window_height = 0;

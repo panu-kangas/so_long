@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_keyhook_bonus.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:33:25 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:33:26 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long_bonus.h"
 
 void	change_player_coord_for_redraw(t_game *game, char c, int i)
@@ -93,7 +105,8 @@ void	move_player(t_game *game, char c)
 			game->left_right = 'R';
 		player_animation(game);
 	}
-	if (game->map_is_big == 0 || is_close_to_wall(game, c) == 0)
+	if ((game->map_x_is_big == 0 && game->map_y_is_big == 0) \
+	|| is_close_to_wall(game, c) == 0)
 		move_p_img(game, c);
 	else
 		redraw_map(game, c);
@@ -102,8 +115,7 @@ void	move_player(t_game *game, char c)
 	num = ft_itoa(++counter);
 	if (num == NULL)
 		sys_error_exit(game, game->mlx, "Malloc failed");
-	game->total_moves = mlx_put_string(game->mlx, num, \
-	190, 0);
+	game->total_moves = mlx_put_string(game->mlx, num, 190, 0);
 	free(num);
 	if (game->total_moves == NULL)
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));

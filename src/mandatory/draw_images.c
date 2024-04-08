@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_images.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:27:06 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:27:10 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	check_map_type(t_game *game, int x, int y)
@@ -25,7 +37,7 @@ int	get_y_start(t_game *game)
 	int	height;
 	int	dist_to_walls;
 
-	if (game->map_is_big == 0)
+	if (game->map_y_is_big == 0)
 		return (0);
 	if (game->player_coord[1] <= 3)
 		return (0);
@@ -42,7 +54,7 @@ int	get_x_start(t_game *game)
 	int	width;
 	int	dist_to_walls;
 
-	if (game->map_is_big == 0)
+	if (game->map_x_is_big == 0)
 		return (0);
 	if (game->player_coord[0] <= 6)
 		return (0);

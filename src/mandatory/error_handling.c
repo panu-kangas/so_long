@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_handling.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:27:49 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 13:33:45 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long.h"
 
 void	ft_free_map(t_game *game)
@@ -8,7 +20,11 @@ void	ft_free_map(t_game *game)
 	if (game->map != NULL)
 	{
 		while (i < game->map_height)
+		{
+			if (game->map[i] == NULL)
+				break ;
 			free(game->map[i++]);
+		}
 	}
 	free(game->map);
 }

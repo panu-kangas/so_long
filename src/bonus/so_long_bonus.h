@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long_bonus.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:34:37 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:34:39 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_BONUS_H
 # define SO_LONG_BONUS_H
 
@@ -48,7 +60,8 @@ typedef struct s_game
 	char		*map_file_str;
 	char		left_right;
 	int			map_file_fd;
-	int			map_is_big;
+	int			map_x_is_big;
+	int			map_y_is_big;
 	int			map_height;
 	int			map_width;
 	int			window_height;

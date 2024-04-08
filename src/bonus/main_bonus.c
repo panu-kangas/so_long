@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:34:01 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:34:03 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "so_long_bonus.h"
 
 int32_t	ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
@@ -12,12 +24,12 @@ void	set_window_size_and_enemies(t_game *game)
 	if (game->window_width > 1050)
 	{
 		game->window_width = 1050;
-		game->map_is_big = 1;
+		game->map_x_is_big = 1;
 	}
 	if (game->window_height > 700)
 	{
 		game->window_height = 700;
-		game->map_is_big = 1;
+		game->map_y_is_big = 1;
 	}
 	set_enemies(game);
 }
@@ -49,7 +61,8 @@ void	init_game_struct(t_game *game)
 	game->enemies = NULL;
 	game->left_right = 'R';
 	game->map_file_fd = -2;
-	game->map_is_big = 0;
+	game->map_x_is_big = 0;
+	game->map_y_is_big = 0;
 	game->map_height = 0;
 	game->map_width = 0;
 	game->window_height = 0;

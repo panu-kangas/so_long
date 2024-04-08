@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pkangas <pkangas@student.hive.fi>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/08 12:28:55 by pkangas           #+#    #+#             */
+/*   Updated: 2024/04/08 12:47:47 by pkangas          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
@@ -30,7 +42,8 @@ typedef struct s_game
 	t_map		**map;
 	char		*map_file_str;
 	int			map_file_fd;
-	int			map_is_big;
+	int			map_x_is_big;
+	int			map_y_is_big;
 	int			map_height;
 	int			map_width;
 	int			window_height;
