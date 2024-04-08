@@ -23,6 +23,7 @@ void	ft_free_game_struct(t_game *game)
 	{
 		ft_free_map(game);
 		free(game->map_file_str);
+		free(game->enemies);
 	}
 	free(game);
 }

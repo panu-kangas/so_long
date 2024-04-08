@@ -46,6 +46,7 @@ void	init_game_struct(t_game *game)
 	game->mlx = NULL;
 	game->map = NULL;
 	game->map_file_str = NULL;
+	game->enemies = NULL;
 	game->left_right = 'R';
 	game->map_file_fd = -2;
 	game->map_is_big = 0;
