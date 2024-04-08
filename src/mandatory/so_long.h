@@ -83,5 +83,6 @@ int			check_wall(t_game *game, int num);
 void		delete_text_images(t_game *game);
 void		is_game_over(t_game *game);
 int			move_count_to_window(t_game *game, int move_count);
+void		write_ending(t_game *game, char *str);
 
 #endif

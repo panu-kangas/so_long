@@ -33,6 +33,11 @@ void	check_for_collectible(t_game *game)
 	exit_y = game->exit_co[1];
 	if (game->collectible_count == -2)
 		game->map[exit_y][exit_x].dist_to_player--;
+	if (game->map[exit_y][exit_x].dist_to_player < 0)
+	{
+		write_ending(game, "You lose =(");
+		game->collectible_count = -3;
+	}
 }
 
 void	redraw_map(t_game *game, char c)

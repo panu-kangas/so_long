@@ -41,7 +41,7 @@ int	execute_attack(t_game *game, int x, int y, int flag)
 	}
 }
 
-/* void	set_attack_img(t_game *game, mlx_texture_t **attack_text)
+void	set_attack_img(t_game *game, mlx_texture_t **attack_text)
 {
 	if (game->left_right == 'R')
 		attack_text[0] = mlx_load_png("./sprites/animations/attack1.png");
@@ -55,7 +55,7 @@ int	execute_attack(t_game *game, int x, int y, int flag)
 		attack_text[1] = mlx_load_png("./sprites/animations/attack2_mirr.png");
 	if (!attack_text[1])
 		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-} */
+}
 
 void	attack_animation(t_game *game)
 {
@@ -66,24 +66,9 @@ void	attack_animation(t_game *game)
 
 	x = game->player_img[game->player_img_i]->instances[0].x;
 	y = game->player_img[game->player_img_i]->instances[0].y;
-
-
-	if (game->left_right == 'R')
-		attack_text[0] = mlx_load_png("./sprites/animations/attack1.png");
-	else
-		attack_text[0] = mlx_load_png("./sprites/animations/attack1_mirr.png");
-	if (!attack_text[0])
-		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-	if (game->left_right == 'R')
-		attack_text[1] = mlx_load_png("./sprites/animations/attack2.png");
-	else
-		attack_text[1] = mlx_load_png("./sprites/animations/attack2_mirr.png");
-	if (!attack_text[1])
-		error_exit(game, game->mlx, mlx_strerror(mlx_errno));
-
-
 	if (flag == 0)
 	{
+		set_attack_img(game, attack_text);
 		game->attack_img[0] = mlx_texture_to_image(game->mlx, attack_text[0]);
 		if (!game->attack_img[0])
 			error_exit(game, game->mlx, mlx_strerror(mlx_errno));
