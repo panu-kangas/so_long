@@ -16,8 +16,7 @@ To build and run **Diamond Hunt**, follow these steps:
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/panu-kangas/so_long.git
-    cd so_long
+    git clone https://github.com/panu-kangas/so_long.git && cd so_long
     ```
 
 2. **Build the project:**
