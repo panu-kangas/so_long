@@ -5,6 +5,10 @@ Thankfully, the King’s trusty Hammer is by his side, ready to smash any troubl
 
 Oh, and heads up — once you’ve collected all the diamonds, there’s a nasty little surprise waiting on your way back... so count your steps when you head for the exit!
 
+## Gameplay video (click the image to view in YouTube)
+
+[![Watch the Diamond Hunt demo](https://img.youtube.com/vi/I9FEBkjiU34/maxresdefault.jpg)](https://youtu.be/I9FEBkjiU34)
+
 ## 🛠️ Build Instructions (how to play the game)
 
 ⚠️ **NOTE:**  
