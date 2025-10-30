@@ -69,3 +69,9 @@ To build and run **Diamond Hunt**, follow these steps:
 - **H:** Use the Hammer to smash obstacles or enemies
 - **Escape:** Exit the game
 
+## Credits
+💖 Thanks to [Pixel Frog](https://pixelfrog-assets.itch.io) for the amazing game assets!
+
+
+
+
